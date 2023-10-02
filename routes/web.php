@@ -14,9 +14,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+  return view('posts');
+})->name('posts');
 
-Route::get('/home', function () {
-    return "Welcome to the home page";
-});
+Route::get('/posts/{post}', function ($slug) {
+  if (!file_exists($path = __DIR__ . "/../resources/posts/{$slug}.html")) {
+    // abort(404);
+    return redirect(route('posts'));
+  }
+
+  $post = cache()->remember("posts.{$slug}", now()->addMinute(60), fn () => file_get_contents($path));
+
+  return view('post', ['post' => $post]);
+})->name('post')->where('post', "[A-z_\-]+");
