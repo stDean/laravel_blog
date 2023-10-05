@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Single Blog</title>
-    <link rel="stylesheet" href="/app.css">
-  </head>
-  <body>
-    <article>
-      <?= $post; ?>
-    </article>
+<x-layout>
 
-    <a href="/">Go Back</a>
-  </body>
-</html>
+  <article>
+    <h1>{{ $post->title }}</h1>
+    <p>
+      {{ $post->body  }}
+    </p>
+  </article>
+
+  <a href="/">Go Back</a>
+  
+</x-layout>
