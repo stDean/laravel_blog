@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\PostController;
-use App\Models\Category;
-use App\Models\Post;
-use App\Models\User;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,9 +16,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [PostController::class, 'index'])->name('home');
+// Route::get('/', [PostController::class, 'index'])->name('home');
 
-Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('post');
+// Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('post');
+
+// Group routes!!
+Route::controller(PostController::class)->group(function () {
+  Route::get('/', 'index')->name('home');
+  Route::get('posts/{post:slug}', 'show')->name('post');
+});
+
+
+Route::controller(RegisterController::class)
+  ->middleware('guest')
+  ->group(function () {
+    Route::get('register', 'create');
+    Route::post('register', 'store');
+  });
+
+Route::get('login', [SessionController::class, 'create'])->middleware('guest');
+Route::post('session', [SessionController::class, 'store'])->middleware('guest');
+Route::post('logout', [SessionController::class, 'destroy'])->middleware('auth');
 
 // Route::get('category/{category:slug}', function (Category $category) {
 //   return view('posts', [
@@ -29,9 +46,9 @@ Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('post');
 //   ]);
 // })->name('category');
 
-Route::get('authors/{author:username}', function (User $author) {
-  return view('posts', [
-    'posts' => $author->posts,
+// Route::get('authors/{author:username}', function (User $author) {
+//   return view('posts.index', [
+//     'posts' => $author->posts,
     // 'categories' => Category::all()
-  ]);
-})->name('author');
+//   ]);
+// })->name('author');
