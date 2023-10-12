@@ -20,12 +20,12 @@ class User extends Authenticatable
    *
    * @var array<int, string>
    */
-  protected $fillable = [
-    'name',
-    'username',
-    'email',
-    'password',
-  ];
+  // protected $fillable = [
+  //   'name',
+  //   'username',
+  //   'email',
+  //   'password',
+  // ];
 
   /**
    * The attributes that should be hidden for serialization.
@@ -53,9 +53,14 @@ class User extends Authenticatable
 
   // Mutator 
   public function password(): Attribute
-  { 
+  {
     return Attribute::make(
       set: fn ($val) => bcrypt($val)
     );
+  }
+
+  public function comments(): HasMany
+  {
+    return $this->hasMany(Comment::class);
   }
 }

@@ -20,18 +20,17 @@ class SessionController extends Controller
       'password' => "required"
     ]);
 
-    if (auth()->attempt($attributes)) {
-      $request->session()->regenerate();
-      return redirect('/')->with('success', "Welcome Back!");
+    if (!auth()->attempt($attributes)) {
+      // return back()
+      //   ->withErrors(['email' => 'Your provided credential can not be verified.'])
+      //   ->onlyInput('email')
+      throw ValidationException::withMessages([
+        'email' => 'Your provided credential can not be verified.'
+      ]);
     }
 
-    // return back()
-    //   ->withErrors(['email' => 'Your provided credential can not be verified.'])
-    //   ->onlyInput('email');
-
-    throw ValidationException::withMessages([
-      'email' => 'Your provided credential can not be verified.'
-    ]);
+    $request->session()->regenerate();
+    return redirect('/')->with('success', "Welcome Back!");;
   }
 
   public function destroy(Request $request)

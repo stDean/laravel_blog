@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionController;
@@ -26,6 +28,7 @@ Route::controller(PostController::class)->group(function () {
   Route::get('posts/{post:slug}', 'show')->name('post');
 });
 
+Route::post('posts/{post:slug}/comment', [PostCommentController::class, 'store']);
 
 Route::controller(RegisterController::class)
   ->middleware('guest')
@@ -49,6 +52,8 @@ Route::post('logout', [SessionController::class, 'destroy'])->middleware('auth')
 // Route::get('authors/{author:username}', function (User $author) {
 //   return view('posts.index', [
 //     'posts' => $author->posts,
-    // 'categories' => Category::all()
+// 'categories' => Category::all()
 //   ]);
 // })->name('author');
+
+Route::post('newsletter', NewsletterController::class);
