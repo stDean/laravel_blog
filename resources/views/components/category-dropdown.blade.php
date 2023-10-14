@@ -6,7 +6,8 @@
     >
       {{ isset($currentCategory) ? ucfirst($currentCategory->name) : "Category" }}
       
-      <x-icon name="drop-down"
+      <x-icon 
+        name="drop-down"
         class="absolute pointer-events-none" 
         style="right: 12px;"  
       />

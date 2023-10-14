@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -24,5 +26,28 @@ class PostController extends Controller
       // 'comments' => []
       // 'categories' => Category::all()
     ]);
+  }
+
+  public function create()
+  {
+    return view('posts.create');
+  }
+
+  public function store(Request $request)
+  {
+    $attributes = $request->validate([
+      'title' => 'required',
+      'slug' => ['required', Rule::unique('posts', 'slug')],
+      'thumbnail' => 'image',
+      'excerpt' => 'required',
+      'body' => 'required',
+      'category_id' => ['required', Rule::exists('categories', 'id')],
+    ]);
+
+    $attributes['user_id'] = auth()->id();
+    $attributes['thumbnail'] = $request->file('thumbnail')->store('thumbnail');
+
+    Post::create($attributes);
+    return redirect('/');
   }
 }
