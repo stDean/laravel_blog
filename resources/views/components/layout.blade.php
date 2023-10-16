@@ -30,13 +30,61 @@
           <a href="/login" class="text-xs font-bold uppercase ml-6 text-blue-500">Log In</a>
 
           @else
-          <span class="font-bold uppercase text-xs">Welcome, {{ auth()->user()->name }}!</span>
 
-          <form method="POST" action="/logout" class="text-xs text-blue-500 ml-6 font-semibold">
-            @csrf
+          <x-dropdown>
+            <x-slot name='trigger'>
+              <button class="font-bold uppercase text-xs">Welcome, {{ auth()->user()->name }}!</button>
+            </x-slot>
 
-            <button type="submit">Log Out</button>
-          </form>
+            {{-- using the gate authorization to check if user is an admin --}}
+            {{-- @can('admin')  
+              <x-dropdown-item 
+                href='/admin/posts'
+                :active="request()->is('admin/posts')"
+              >
+                Dashboard
+              </x-dropdown-item>
+              <x-dropdown-item 
+                href='/admin/posts/create' 
+                :active="request()->is('admin/posts/create')"
+              >
+                New Post
+              </x-dropdown-item>
+            @endcan --}}
+            @admin
+            <x-dropdown-item 
+              href='/admin/posts'
+              :active="request()->is('admin/posts')"
+            >
+              Dashboard
+            </x-dropdown-item>
+            <x-dropdown-item 
+              href='/admin/posts/create' 
+              :active="request()->is('admin/posts/create')"
+            >
+              New Post
+            </x-dropdown-item>
+            @endadmin
+
+            <x-dropdown-item 
+              x-data="{}" 
+              @click.prevent="document.querySelector('#logout-form').submit()"
+              class="cursor-pointer"
+            >
+              Log Out
+            </x-dropdown-item>
+            <form 
+              method="POST" 
+              action="/logout" 
+              id='logout-form' 
+              class="text-xs text-blue-500 ml-6 font-semibold hidden"
+            >
+              @csrf
+  
+              {{-- <button type="submit">Log Out</button> --}}
+            </form>
+
+          </x-dropdown>
         @endguest
 
         <a href="#news" class="bg-blue-500 ml-3 rounded-full text-xs font-semibold text-white uppercase py-3 px-5">

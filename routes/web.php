@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminPostController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostController;
@@ -26,11 +27,22 @@ use Illuminate\Support\Facades\Route;
 Route::controller(PostController::class)->group(function () {
   Route::get('/', 'index')->name('home');
   Route::get('posts/{post:slug}', 'show')->name('post');
-  Route::get('admin/posts/create', 'create')->middleware('admin');
-  Route::post('admin/posts', 'store')->middleware('admin');
 });
 
 Route::post('posts/{post:slug}/comment', [PostCommentController::class, 'store']);
+
+Route::middleware('can:admin')
+  ->group(function () {
+    Route::resource('admin/posts', AdminPostController::class)->except('show');
+    // Route::get('admin/posts', 'index');
+    // Route::get('admin/posts/create', 'create');
+    // Route::post('admin/posts', 'store');
+    // Route::get('admin/posts/{post}/edit', 'edit');
+    // Route::patch('admin/posts/{post}', 'update');
+    // Route::delete('admin/posts/{post}', 'destroy');
+  });
+
+
 
 Route::controller(RegisterController::class)
   ->middleware('guest')

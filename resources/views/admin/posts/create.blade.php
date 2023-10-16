@@ -1,24 +1,21 @@
 <x-layout>
-  <h1 class="text-lg font-bold text-center mb-4">
-    Publish New Post
-  </h1>
+  <x-setting heading="Publish New Post">
 
-  <x-panel class="max-w-md mx-auto">
     <form action="/admin/posts" method="POST" enctype="multipart/form-data">
       @csrf
   
-      <x-form.input name="title" />
-
-      <x-form.input name="slug" />
-
+      <x-form.input name="title" required />
+  
+      <x-form.input name="slug" required />
+  
       <x-form.input name="thumbnail" type='file' />
-
-      <x-form.textarea name="excerpt" msg='excerpt for the post' />
-
-      <x-form.textarea name="body" />
-
+  
+      <x-form.textarea name="excerpt" msg='excerpt for the post' required />
+  
+      <x-form.textarea name="body" required />
+  
       <x-form.field>
-        <x-form.label name="category" />
+        <x-form.label name="category" required />
         
         <select name="category_id" id="category_id">
           @foreach (\App\Models\Category::all() as $category)
@@ -36,5 +33,6 @@
   
       <x-form.button>Publish</x-form.button>
     </form>
-  </x-panel>
+
+  </x-setting>  
 </x-layout>

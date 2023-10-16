@@ -21,7 +21,7 @@ class RegisterController extends Controller
       'email' => ["required", "email", "max:255", Rule::unique('users', 'email')],
       'password' => "required | min:6"
     ]);
-
+    
     $user = User::create($attributes);
     // session()->flash('success', "Your account has been created!");
     auth()->login($user);
